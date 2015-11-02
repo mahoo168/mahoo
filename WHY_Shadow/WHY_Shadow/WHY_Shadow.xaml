@@ -1,0 +1,8 @@
+﻿<Window x:Class="WHY_Shadow.WHY_Shadow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="WHY_Shadow" Height="300" Width="300">
+    <Grid>
+        
+    </Grid>
+</Window>
