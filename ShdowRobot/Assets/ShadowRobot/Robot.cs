@@ -5,7 +5,8 @@ using System.Collections.Generic;
 /// <summary>
 /// Not人型
 /// </summary>
-public class Robot : MonoBehaviour {
+public class Robot : MonoBehaviour
+{
 
     //public GameObject model;
     public GameObject robot;
@@ -13,47 +14,56 @@ public class Robot : MonoBehaviour {
     List<Human> List_Human;
     List<Human> List_Human_Last;
     CIPCReceiver cipc;
+    //モード
     bool IsChangeVelocity;
-
+    bool IsHight;
+    bool IsJumpVel;
+    bool IsJump;
     //Jump用
     Vector3 preVel;
     Vector3 prePos;
- 
-	// Use this for initialization
-	void Start () 
+
+    // Use this for initialization
+    void Start()
     {
         this.List_Human = new List<Human>();
         this.List_Human_Last = new List<Human>();
         this.cipc = GameObject.FindGameObjectWithTag("CIPC").GetComponent<CIPCReceiver>();
         this.IsChangeVelocity = false;
+        this.IsHight = true;
+        this.IsJumpVel = false;
+        this.IsJump = false;
 
         this.preVel = Vector3.zero;
         this.prePos = Vector3.zero;
 
         Debug.Log("Light Robot");
-	}
-	
-	// Update is called once per frame
-	void Update () 
+        float gy = (float)(9.80665 / 6);
+        Physics.gravity = new Vector3(0, -gy, 0);
+    }
+
+    // Update is called once per frame
+    void Update()
     {
-        
+
         this.List_Human_Last = this.List_Human;
         this.List_Human = this.cipc.List_Humans;
         if (this.List_Human.Count != 0)
         {
             this.Move(this.List_Human);
-            this.Jump(this.List_Human);
+            if(this.IsJump)
+                this.Jump(this.List_Human);
 
-        }	
-	}
+        }
+    }
 
     //Action
-    
+
     //xz平面上移動
     void Move(List<Human> list_human)
     {
-        Vector3 centerVec = this.CenterPosition(this.List_Human);
-        Vector3 vec = -centerVec - this.robot.transform.position;
+        Vector3 centerVec = this.CenterPosition(list_human) + new Vector3(0, 0, 0.5f);
+        Vector3 vec = centerVec - this.robot.transform.position;
         vec = vec / vec.magnitude;
 
         if (this.IsChangeVelocity)
@@ -61,14 +71,18 @@ public class Robot : MonoBehaviour {
             float vel = this.Velocity().magnitude;
             this.robot.transform.position += vec / vel / 1000;
         }
-        else this.robot.transform.position += vec / 100;
-        
-        this.robot.transform.LookAt(centerVec);
+        else
+        {           
+            //this.robot.GetComponent<Rigidbody>().AddForce(vec, ForceMode.Acceleration);
+            this.robot.transform.position += vec / 100;
+        }
+
+        //this.robot.transform.LookAt(centerVec);
     }
     //上に飛ぶ
     void Jump(List<Human> list_human)
     {
-        
+
         int human_Num = list_human.Count;
         Vector3 pos = new Vector3();
         for (int i = 0; i < list_human.Count; i++)
@@ -81,7 +95,18 @@ public class Robot : MonoBehaviour {
         {
             Vector3 vel = (pos - this.prePos) / Time.deltaTime;
             Vector3 acc = (vel - this.preVel) / Time.deltaTime;
-            this.robot.GetComponent<Rigidbody>().AddForce(acc, ForceMode.Force);
+
+            if (this.IsJumpVel)
+            {
+                //速度を与える
+                this.robot.GetComponent<Rigidbody>().velocity = vel;
+            }
+            else
+            {
+                //加速度を与える
+                this.robot.GetComponent<Rigidbody>().AddForce(acc * this.robot.GetComponent<Rigidbody>().mass, ForceMode.Force);
+            }
+
             //Debug.Log("JUMP:" + acc.ToString());
             this.prePos = pos;
             this.preVel = vel;
@@ -90,12 +115,12 @@ public class Robot : MonoBehaviour {
         {
             this.prePos = pos;
         }
-        
+
     }
 
     //衝突したとき
-    
-    
+
+
     //間に割って入る
     Vector3 Warikomi(List<Human> list_human)
     {
@@ -129,7 +154,7 @@ public class Robot : MonoBehaviour {
         }
         return vector;
     }
-    
+
 
     //移動速度変化
     Vector3 Velocity()
@@ -137,11 +162,11 @@ public class Robot : MonoBehaviour {
         Vector3 velocity = Vector3.zero;
         int human_Num = this.List_Human.Count;
         int human_Num_Last = this.List_Human_Last.Count;
-        
+
         int count;
         if (human_Num < human_Num_Last) count = human_Num;
         else count = human_Num_Last;
-        
+
         //人物移動距離の平均
         Vector3 vector = Vector3.zero;
         for (int i = 0; i < count; i++)
@@ -164,7 +189,20 @@ public class Robot : MonoBehaviour {
         {
             vector += list_human[i].bones[0].position;
         }
-        vector = new Vector3(vector.x / human_Num, 0, vector.z / human_Num);
+
+        if (this.IsHight)
+        {
+            //高さ成分あり
+            vector /= human_Num;
+            vector = new Vector3(-vector.x, vector.y * 2, -vector.z);
+        }
+        else
+        {
+            //高さ成分無視
+            vector = new Vector3(vector.x / human_Num, 0, vector.z / human_Num);
+            vector = -vector;
+        }
+
         //vector = vector / vector.magnitude;
         return vector;
     }
@@ -185,5 +223,20 @@ public class Robot : MonoBehaviour {
     public void ChangeVel(bool Is)
     {
         this.IsChangeVelocity = Is;
+    }
+    public void ChangeIsHigh(bool Is)
+    {
+        this.IsHight = Is;
+    }
+    public void ChangeIsJumpVel(bool Is)
+    {
+        this.IsJumpVel = Is;
+    }
+    public void ChangeGravity(float gy)
+    {
+        Physics.gravity = new Vector3(0, - gy, 0);
+    }
+    public void ChangeJump(bool Is){
+        this.IsJump = Is;
     }
 }

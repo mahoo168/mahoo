@@ -99,6 +99,8 @@ public class CIPCReceiver : MonoBehaviour {
                     bone.IsTracking = dec.get_byte();
 
                     human.bones[j] = bone;
+
+                    //if(j == 0) Debug.Log(bone.position.ToString()) ;
                 }
 
                 this.List_Humans.Add(human);

@@ -5,7 +5,7 @@ using System.Collections.Generic;
 
 public class UIScript : MonoBehaviour
 {
-    
+
     public Camera Projector0;
     public Camera Projector1;
     public GameObject Light;
@@ -13,6 +13,7 @@ public class UIScript : MonoBehaviour
     public GameObject model;
     public GameObject robot;
     public GameObject ModelView;
+    public PhysicMaterial RobotPM;
 
     int LightID;
     RenderTexture texture;
@@ -27,7 +28,7 @@ public class UIScript : MonoBehaviour
     public InputField myPort;
     public InputField IP;
     public InputField serverPort;
-    
+
 
     // Use this for initialization
     void Start()
@@ -38,7 +39,7 @@ public class UIScript : MonoBehaviour
         {
             this.List_orgPosLight.Add(this.List_Light[i].transform.position);
         }
-            this.orgPosProjector0 = this.Projector0.transform.position;
+        this.orgPosProjector0 = this.Projector0.transform.position;
         this.orgPosProjector1 = this.Projector1.transform.position;
         this.orgQuatProjector0 = this.Projector0.transform.rotation;
         this.orgQuatProjector1 = this.Projector1.transform.rotation;
@@ -74,7 +75,7 @@ public class UIScript : MonoBehaviour
         //this.Light.transform.position = Pos;
 
         Vector3 prePos = this.List_Light[this.LightID].transform.position;
-        Vector3 Pos = new Vector3(prePos.x, prePos.y,  z);
+        Vector3 Pos = new Vector3(prePos.x, prePos.y, z);
         this.List_Light[this.LightID].transform.position = Pos;
     }
     public void Changed_LightColor_R(float r)
@@ -95,7 +96,7 @@ public class UIScript : MonoBehaviour
         Color color = light.color;
         light.color = new Color(color.r, color.g, b, color.a);
     }
-    
+
     //DirectLightVer
     public void Changed_LightRotarionX()
     {
@@ -125,7 +126,7 @@ public class UIScript : MonoBehaviour
     //Priojector
     public void Changed_Projector0PositonX(float x)
     {
-        Vector3 Pos = new Vector3( this.orgPosProjector0.x + x, this.Projector0.transform.position.y, this.Projector0.transform.position.z);
+        Vector3 Pos = new Vector3(this.orgPosProjector0.x + x, this.Projector0.transform.position.y, this.Projector0.transform.position.z);
         this.Projector0.transform.position = Pos;
 
     }
@@ -133,7 +134,7 @@ public class UIScript : MonoBehaviour
     {
         Vector3 Pos = new Vector3(this.Projector0.transform.position.x, this.orgPosProjector0.y + y, this.Projector0.transform.position.z);
         this.Projector0.transform.position = Pos;
-       
+
     }
     public void Changed_Projector0PositonZ(float z)
     {
@@ -154,7 +155,7 @@ public class UIScript : MonoBehaviour
 
     public void Changed_Projector1PositonX(float x)
     {
-        Vector3 Pos = new Vector3( this.orgPosProjector1.x + x, this.Projector1.transform.position.y, this.Projector1.transform.position.z);
+        Vector3 Pos = new Vector3(this.orgPosProjector1.x + x, this.Projector1.transform.position.y, this.Projector1.transform.position.z);
         this.Projector1.transform.position = Pos;
 
     }
@@ -180,13 +181,13 @@ public class UIScript : MonoBehaviour
     {
         this.Projector1.fieldOfView = FoV;
     }
-    
+
     //CIPC
     public void ConnectCIPC()
     {
         this.cipcR = GameObject.FindGameObjectWithTag("CIPC").GetComponent<CIPCReceiver>();
         this.cipcR.ConnectCIPC(int.Parse(this.myPort.text), this.IP.text, int.Parse(this.serverPort.text));
-        
+
     }
 
     //TestModelView
@@ -203,15 +204,32 @@ public class UIScript : MonoBehaviour
     {
         this.robot.SetActiveRecursively(isView);
     }
- 
+
     //Robot
     public void IsChangeVel(bool Is)
     {
         GameObject.FindGameObjectWithTag("Generator").GetComponent<Robot>().ChangeVel(Is);
+    }
+    public void IsChangeHight(bool Is)
+    {
+        GameObject.FindGameObjectWithTag("Generator").GetComponent<Robot>().ChangeIsHigh(Is);
+    }
+    public void IsChangeJump(bool Is)
+    {
+        GameObject.FindGameObjectWithTag("Generator").GetComponent<Robot>().ChangeIsJumpVel(Is);
+    }
+    public void ChangeGravity(float gy)
+    {
+        GameObject.FindGameObjectWithTag("Generator").GetComponent<Robot>().ChangeGravity(gy);
+    }
+    public void IsJump(bool Is)
+    {
+        GameObject.FindGameObjectWithTag("Generator").GetComponent<Robot>().ChangeJump(Is);
 
     }
-
-    
+    public void ChangeBoundness(float b)
+    {
+        this.RobotPM.bounciness = b;
+    }
 }
-
 
