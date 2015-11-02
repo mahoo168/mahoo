@@ -1,0 +1,2 @@
+E:\maho\GitHub\Git\usr\Project\BoneGenerator\BoneGenerator1.06 - コピー\obj\Debug\UnityVS.BoneGenerator1.06 - コピー.CSharp.csprojResolveAssemblyReference.cache
+E:\maho\GitHub\Git\usr\Project\BoneGenerator\BoneGenerator1.06 - コピー\obj\Debug\Assembly-CSharp.dll
