@@ -38,8 +38,8 @@ public class Robot : MonoBehaviour
         this.prePos = Vector3.zero;
 
         Debug.Log("Light Robot");
-        float gy = (float)(9.80665 / 6);
-        Physics.gravity = new Vector3(0, -gy, 0);
+        //float gy = (float)(9.80665 / 6);
+        //Physics.gravity = new Vector3(0, -gy, 0);
     }
 
     // Update is called once per frame
@@ -119,8 +119,6 @@ public class Robot : MonoBehaviour
     }
 
     //衝突したとき
-
-
     //間に割って入る
     Vector3 Warikomi(List<Human> list_human)
     {
@@ -194,7 +192,7 @@ public class Robot : MonoBehaviour
         {
             //高さ成分あり
             vector /= human_Num;
-            vector = new Vector3(-vector.x, vector.y * 2, -vector.z);
+            vector = new Vector3(-vector.x, vector.y , -vector.z);
         }
         else
         {
