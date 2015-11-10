@@ -34,6 +34,7 @@ namespace WHY_Shadow
 
         public void ShowWindow()
         {
+            this.TransparencyKey = Color.White;
             this.Show();
             this.imageArea.Show();
         }

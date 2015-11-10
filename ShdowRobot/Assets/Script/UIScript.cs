@@ -2,6 +2,7 @@
 using UnityEngine.UI;
 using System.Collections;
 using System.Collections.Generic;
+using Robot;
 
 public class UIScript : MonoBehaviour
 {
@@ -208,23 +209,23 @@ public class UIScript : MonoBehaviour
     //Robot
     public void IsChangeVel(bool Is)
     {
-        GameObject.FindGameObjectWithTag("Generator").GetComponent<Robot>().ChangeVel(Is);
+        GameObject.FindGameObjectWithTag("Generator").GetComponent<Robot.RobotControll>().ChangeVel(Is);
     }
     public void IsChangeHight(bool Is)
     {
-        GameObject.FindGameObjectWithTag("Generator").GetComponent<Robot>().ChangeIsHigh(Is);
+        GameObject.FindGameObjectWithTag("Generator").GetComponent<Robot.RobotControll>().ChangeIsHigh(Is);
     }
     public void IsChangeJump(bool Is)
     {
-        GameObject.FindGameObjectWithTag("Generator").GetComponent<Robot>().ChangeIsJumpVel(Is);
+        GameObject.FindGameObjectWithTag("Generator").GetComponent<Robot.RobotControll>().ChangeIsJumpVel(Is);
     }
     public void ChangeGravity(float gy)
     {
-        GameObject.FindGameObjectWithTag("Generator").GetComponent<Robot>().ChangeGravity(gy);
+        GameObject.FindGameObjectWithTag("Generator").GetComponent<Robot.RobotControll>().ChangeGravity(gy);
     }
     public void IsJump(bool Is)
     {
-        GameObject.FindGameObjectWithTag("Generator").GetComponent<Robot>().ChangeJump(Is);
+        GameObject.FindGameObjectWithTag("Generator").GetComponent<Robot.RobotControll>().ChangeJump(Is);
 
     }
     public void ChangeBoundness(float b)
